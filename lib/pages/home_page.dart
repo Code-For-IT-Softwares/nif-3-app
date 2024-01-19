@@ -4,6 +4,8 @@ import 'package:nif_web/pages/list_page.dart';
 import 'package:nif_web/res/colors.dart';
 import 'package:nif_web/res/images.dart';
 
+// HOMESCREEN
+
 class HomePage extends StatefulWidget {
   HomePage({super.key});
 
