@@ -8,10 +8,10 @@ import '../utils/extra.dart';
 class IdeaPage extends StatelessWidget {
   const IdeaPage({
     Key? key,
-    required this.details,
+    required this.ideaDetails,
     required this.index,
   }) : super(key: key);
-  final Idea details;
+  final Idea ideaDetails;
   final int index;
   @override
   Widget build(BuildContext context) {
@@ -25,29 +25,8 @@ class IdeaPage extends StatelessWidget {
           Expanded(
             flex: 7,
             child: SingleChildScrollView(
-              child: IdeaSheet(
-                details: details,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class IdeaSheet extends StatelessWidget {
-  const IdeaSheet({
-    Key? key,
-    required this.details,
-  }) : super(key: key);
-
-  final Idea details;
-
-  @override
-  Widget build(BuildContext context) {
-    return Hero(
-      tag: 'idea-tag${details.id}',
+              child: Hero(
+      tag: 'idea-tag${ideaDetails.id}',
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15),
         width: MediaQuery.of(context).size.width,
@@ -75,7 +54,7 @@ class IdeaSheet extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        details.registrationid.toUpperCase(),
+                        ideaDetails.registrationid!.toUpperCase(),
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -83,38 +62,38 @@ class IdeaSheet extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8),
-                    DetailTag(title: 'Team', descriptition: details.teamname),
+                    DetailTag(title: 'Team', descriptition: ideaDetails.teamname!),
                     SizedBox(height: 8),
                     DetailTag(
-                        title: 'Leader', descriptition: details.leadername),
-                    for (int i = 0; i < details.membersname.length; i++)
+                        title: 'Leader', descriptition: ideaDetails.leadername!),
+                    for (int i = 0; i < ideaDetails.membersname!.length; i++)
                       teamMembers(i),
                     SizedBox(height: 8),
                     DetailTag(
-                        title: 'Phone no', descriptition: details.phoneno),
+                        title: 'Phone no', descriptition: ideaDetails.phoneno!),
                     SizedBox(height: 8),
                     DetailTag(
                         title: 'WhatsApp no',
-                        descriptition: details.whatsappno),
+                        descriptition: ideaDetails.whatsappno!),
                     SizedBox(height: 8),
-                    DetailTag(title: 'Email', descriptition: details.email),
+                    DetailTag(title: 'Email', descriptition: ideaDetails.email!),
                     SizedBox(height: 8),
-                    DetailTag(title: 'City', descriptition: details.city),
+                    DetailTag(title: 'City', descriptition: ideaDetails.city!),
                     SizedBox(height: 8),
-                    DetailTag(title: 'State', descriptition: details.state),
-                    SizedBox(height: 8),
-                    DetailTag(
-                        title: 'College', descriptition: details.collegename),
+                    DetailTag(title: 'State', descriptition: ideaDetails.state!),
                     SizedBox(height: 8),
                     DetailTag(
-                        title: 'Idea Theme', descriptition: details.ideatheme),
+                        title: 'College', descriptition: ideaDetails.collegename!),
                     SizedBox(height: 8),
                     DetailTag(
-                        title: 'Date & Time', descriptition: details.datetime),
+                        title: 'Idea Theme', descriptition: ideaDetails.ideatheme!),
                     SizedBox(height: 8),
                     DetailTag(
+                        title: 'Date & Time', descriptition: ideaDetails.datetime!.toString()),
+                    SizedBox(height: 8),
+                    DescriptionTag(
                         title: 'Idea Description',
-                        descriptition: details.ideadescription),
+                        descriptition: ideaDetails.ideadescription!),
                   ],
                 )),
             Row(
@@ -125,16 +104,20 @@ class IdeaSheet extends StatelessWidget {
           ],
         ),
       ),
+    )
+            ),
+          )
+        ],
+      ),
     );
   }
-
   Widget teamMembers(int i) {
     return Column(
       children: [
         SizedBox(height: 8),
         DetailTag(
             title: 'Member',
-            descriptition: ' ${i + 1}: ${details.membersname[i]}'),
+            descriptition: ' ${i + 1}: ${ideaDetails.membersname?[i]}'),
       ],
     );
   }
@@ -160,3 +143,4 @@ class IdeaSheet extends StatelessWidget {
             )));
   }
 }
+

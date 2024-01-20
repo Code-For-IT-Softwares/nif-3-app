@@ -17,54 +17,45 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: Colors.primaryColor,
-          hintColor: Colors.grey_70,
-          colorScheme: ColorScheme.light(
-              primary: Colors.primaryColor, secondary: Colors.secondaryColor)),
-
-      home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 238, 238, 238),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(height: 70, child: Image.asset(opjuIcLogo)),
-              LoginTemplate(context),
-              SizedBox(
-                height: 23,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Forgot your Password?",
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 238, 238, 238),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(height: 70, child: Image.asset(opjuIcLogo)),
+            LoginTemplate(context),
+            SizedBox(
+              height: 23,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Forgot your Password?",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgotPasswordPage())),
+                  child: Text(
+                    "Reset Password",
                     style: TextStyle(
-                        color: Colors.grey,
+                        color: Colors.blue,
                         fontSize: 16,
-                        fontWeight: FontWeight.w700),
+                        fontWeight: FontWeight.bold),
                   ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgotPasswordPage())),
-                    child: Text(
-                      "Reset Password",
-                      style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -206,14 +197,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
               },
               child: Container(
                 width: MediaQuery.of(context).size.width - 60,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13.0),
-                  color: Colors.primaryColor
-                ),
+                    borderRadius: BorderRadius.circular(13.0),
+                    color: Colors.primaryColor),
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
                 child: Center(
                   child: Text(

@@ -22,7 +22,7 @@ class IdeaTab extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => IdeaPage(
-                    details: ideaData, index: index,
+                    ideaDetails: ideaData, index: index,
                   ))),
       // onTap: () => context.goNamed(RouterConst.accountPageName),
       child: Hero(
@@ -52,7 +52,7 @@ class IdeaTab extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            ideaData.registrationid.toUpperCase(),
+                            ideaData.registrationid!.toUpperCase(),
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontFamily: 'roboto',
@@ -154,7 +154,7 @@ class PrototypeTab extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => PrototypePage(details: prototypeData))),
+              builder: (context) => PrototypePage(prototypeDetails: prototypeData))),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 14),
         // height: 85,
@@ -180,7 +180,7 @@ class PrototypeTab extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          prototypeData.registrationid.toUpperCase(),
+                          prototypeData.registrationid!.toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontFamily: 'roboto',
@@ -255,7 +255,7 @@ class StartUpTab extends StatelessWidget {
     Key? key,
     required this.startupData,
   }) : super(key: key);
-  final Startup startupData;
+  final StartUp startupData;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -263,7 +263,7 @@ class StartUpTab extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => StartUpPage(
-                    details: startupData,
+                    startupDetails: startupData,
                   ))),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 14),
@@ -290,7 +290,7 @@ class StartUpTab extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          startupData.registrationid.toUpperCase(),
+                          startupData.registrationid!.toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontFamily: 'roboto',

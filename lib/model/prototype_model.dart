@@ -1,51 +1,113 @@
 // To parse this JSON data, do
 //
-//     final prototypeModel = prototypeModelFromJson(jsonString);
+//     final prototypeListModel = prototypeListModelFromJson(jsonString);
 
-class Prototype {
-    final String id;
-    final String registrationid;
-    final String phoneno;
-    final String whatsappno;
-    final String email;
-    final String teamname;
-    final String leadername;
-    final List<String> membersname;
-    final String collegename;
-    final String city;
-    final String state;
-    final String projecttheme;
-    final String projectdescription;
-    final String uniqueness;
-    final String projectimage;
-    final String idcardimage;
-    final String datetime;
+import 'dart:convert';
 
-  Prototype({
-    required this.id,
-    required this.registrationid,
-    required this.phoneno,
-    required this.whatsappno,
-    required this.email,
-    required this.teamname,
-    required this.leadername,
-    required this.membersname,
-    required this.collegename,
-    required this.city,
-    required this.state,
-    required this.projecttheme,
-    required this.projectdescription,
-    required this.uniqueness,
-    required this.projectimage,
-    required this.idcardimage,
-    required this.datetime,
-  });
+PrototypeListModel prototypeListModelFromJson(String str) => PrototypeListModel.fromJson(json.decode(str));
+
+String prototypeListModelToJson(PrototypeListModel data) => json.encode(data.toJson());
+
+class PrototypeListModel {
+    List<Prototype>? data;
+    int? status;
+    String? message;
+
+    PrototypeListModel({
+        this.data,
+        this.status,
+        this.message,
+    });
+
+    factory PrototypeListModel.fromJson(Map<String, dynamic> json) => PrototypeListModel(
+        data: List<Prototype>.from(json["data"].map((x) => Prototype.fromJson(x))),
+        status: json["status"],
+        message: json["message"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "status": status,
+        "message": message,
+    };
 }
 
+class Prototype {
+    String? id;
+    String? registrationid;
+    String? phoneno;
+    String? whatsappno;
+    String? email;
+    String? teamname;
+    String? leadername;
+    List<String>? membersname;
+    String? collegename;
+    String? city;
+    String? state;
+    String? projecttheme;
+    String? projectdescription;
+    String? uniqueness;
+    String? projectimage;
+    String? idcardimage;
+    DateTime? datetime;
 
-List<Prototype> PrototypeData = [
-  Prototype(id: 'id1', registrationid: 'registrationid1', phoneno: 'phoneno', whatsappno: 'whatsappno', email: 'email', teamname: 'teamname', leadername: 'Strength', membersname: ['membersname','membersname','membersname','membersname'], collegename: 'collegename', city: 'city', state: 'state', projecttheme: 'projecttheme', projectdescription: 'projectdescription', uniqueness: 'uniqueness', projectimage: 'projectimage', idcardimage: 'idcardimage', datetime: 'datetime'),
-  Prototype(id: 'id2', registrationid: 'registrationid2', phoneno: 'phoneno', whatsappno: 'whatsappno', email: 'email', teamname: 'teamname', leadername: 'Strength', membersname: ['membersname','membersname','membersname','membersname'], collegename: 'collegename', city: 'city', state: 'state', projecttheme: 'projecttheme', projectdescription: 'projectdescription', uniqueness: 'uniqueness', projectimage: 'projectimage', idcardimage: 'idcardimage', datetime: 'datetime'),
-  Prototype(id: 'id3', registrationid: 'registrationid3', phoneno: 'phoneno', whatsappno: 'whatsappno', email: 'email', teamname: 'teamname', leadername: 'Strength', membersname: ['membersname','membersname','membersname','membersname'], collegename: 'collegename', city: 'city', state: 'state', projecttheme: 'projecttheme', projectdescription: 'projectdescription', uniqueness: 'uniqueness', projectimage: 'projectimage', idcardimage: 'idcardimage', datetime: 'datetime'),
-  Prototype(id: 'id4', registrationid: 'registrationid4', phoneno: 'phoneno', whatsappno: 'whatsappno', email: 'email', teamname: 'teamname', leadername: 'Strength', membersname: ['membersname','membersname','membersname','membersname'], collegename: 'collegename', city: 'city', state: 'state', projecttheme: 'projecttheme', projectdescription: 'projectdescription', uniqueness: 'uniqueness', projectimage: 'projectimage', idcardimage: 'idcardimage', datetime: 'datetime'),
-];
+    Prototype({
+        this.id,
+        this.registrationid,
+        this.phoneno,
+        this.whatsappno,
+        this.email,
+        this.teamname,
+        this.leadername,
+        this.membersname,
+        this.collegename,
+        this.city,
+        this.state,
+        this.projecttheme,
+        this.projectdescription,
+        this.uniqueness,
+        this.projectimage,
+        this.idcardimage,
+        this.datetime,
+    });
+
+    factory Prototype.fromJson(Map<String, dynamic> json) => Prototype(
+        id: json["_id"],
+        registrationid: json["registrationid"],
+        phoneno: json["phoneno"],
+        whatsappno: json["whatsappno"],
+        email: json["email"],
+        teamname: json["teamname"],
+        leadername: json["leadername"],
+        membersname: List<String>.from(json["membersname"].map((x) => x)),
+        collegename: json["collegename"],
+        city: json["city"],
+        state: json["state"],
+        projecttheme: json["projecttheme"],
+        projectdescription: json["projectdescription"],
+        uniqueness: json["uniqueness"],
+        projectimage: json["projectimage"],
+        idcardimage: json["idcardimage"],
+        datetime: DateTime.parse(json["datetime"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "registrationid": registrationid,
+        "phoneno": phoneno,
+        "whatsappno": whatsappno,
+        "email": email,
+        "teamname": teamname,
+        "leadername": leadername,
+        "membersname": List<dynamic>.from(membersname!.map((x) => x)),
+        "collegename": collegename,
+        "city": city,
+        "state": state,
+        "projecttheme": projecttheme,
+        "projectdescription": projectdescription,
+        "uniqueness": uniqueness,
+        "projectimage": projectimage,
+        "idcardimage": idcardimage,
+        "datetime": datetime!.toIso8601String(),
+    };
+}
