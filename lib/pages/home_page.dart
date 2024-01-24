@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart' hide Colors;
+import 'package:nif_web/Provider/auth_provider.dart';
 import 'package:nif_web/Provider/stats_provider.dart';
 import 'package:nif_web/model/stats_model.dart';
+import 'package:nif_web/pages/account_page.dart';
 import 'package:nif_web/pages/list_page.dart';
 import 'package:nif_web/res/colors.dart';
 import 'package:nif_web/res/images.dart';
 import 'package:provider/provider.dart';
 
+import '../model/user_model.dart';
+
 // HOMESCREEN
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  HomePage({super.key, this.user});
 
+    final UserData? user;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -22,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Provider.of<StatsProvider>(context, listen: false).getsStatsProvider();
+    Provider.of<AuthProvider>(context, listen: false).checkDataStatus();
     super.initState();
   }
 
@@ -29,6 +35,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<StatsProvider>(context);
     Stat statData = provider.getStat();
+    final authProvider = Provider.of<AuthProvider>(context);
+    UserData LoginData = authProvider.userData!;
+
+
+    Future<void> _refresh() async {
+      provider.getsStatsProvider();
+    }
 
     return Scaffold(
       backgroundColor: Color(0xFFFDFEFD),
@@ -42,132 +55,182 @@ class _HomePageState extends State<HomePage> {
         fit: StackFit.expand,
         children: [
           /// Custom Bottom Navigation Bar
-          SingleChildScrollView(
-            child: Center(
-              child: Container(
-                margin: EdgeInsets.only(top: 12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      color: Colors.transparent,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.account_circle,
-                            size: 63,
-                            color: Color(0xFF73839b),
-                          ),
-                          SizedBox(
-                            width: 7,
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Shrey Raj Singh",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'roboto',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                Text(
-                                  "UID2213",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'roboto',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // SizedBox(width: 125,),
-                          Expanded(
-                              flex: 1,
-                              child: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.green,
-                                    size: 35,
-                                  )))
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        "Registration Stats",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'roboto',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    provider.getStatloaded
-                        ? Center(child: CircularProgressIndicator())
-                        : Column(
+          Center(
+            child: Container(
+              margin: EdgeInsets.only(top: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    color: Colors.transparent,
+                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.account_circle,
+                          size: 63,
+                          color: Color(0xFF73839b),
+                        ),
+                        SizedBox(
+                          width: 7,
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  eventsButton(
-                                      title: "StartUps",
-                                      // iconAssetName: "iconAssetName",
-                                      iconAssetName: ideaIcon,
-                                      total: statData.totalstartup!,
-                                      index: 0),
-                                  eventsButton(
-                                      title: "Prototypes",
-                                      // iconAssetName: "iconAssetName",
-                                      iconAssetName: ideaIcon,
-                                      total: statData.totalprototype!,
-                                      index: 1),
-                                ],
+                              Text(
+                                "${LoginData.fullname!} (${LoginData.role})",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'roboto',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  eventsButton(
-                                      title: "Ideas",
-                                      // iconAssetName: "iconAssetName",
-                                      iconAssetName: ideaIcon,
-                                      total: statData.totalidea!,
-                                      index: 2),
-                                  eventsButton2(
-                                    pageName: () {},
-                                    // pageName: RouterConst.detsideaPageName,
-                                    title: "Total Participants",
-                                    // iconAssetName: "iconAssetName",
-                                    iconAssetName: ideaIcon,
-                                    total: statData.totalparticipants!,
-                                  ),
-                                ],
+                              Text(
+                                LoginData.userid!,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'roboto',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15),
                               ),
                             ],
                           ),
-                  ],
-                ),
+                        ),
+                        // SizedBox(width: 125,),
+                        Expanded(
+                            flex: 1,
+                            child: IconButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountPage()));
+                                },
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.green,
+                                  size: 35,
+                                )))
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      "Registration Stats",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'roboto',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    flex: 1,
+                    child:
+                        provider.getStatloaded
+                            ? Center(child: CircularProgressIndicator())
+                            :
+                        RefreshIndicator(
+                      onRefresh: _refresh,
+                      // onRefresh: ,
+                      child: ListView(
+                        // shrinkWrap: true,
+                        // physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              eventsButton(
+                                  title: "StartUps",
+                                  // iconAssetName: "iconAssetName",
+                                  iconAssetName: ideaIcon,
+                                  total: statData.totalstartup!,
+                                  index: 0),
+                              eventsButton(
+                                  title: "Prototypes",
+                                  // iconAssetName: "iconAssetName",
+                                  iconAssetName: ideaIcon,
+                                  total: statData.totalprototype!,
+                                  index: 1),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              eventsButton(
+                                  title: "Ideas",
+                                  // iconAssetName: "iconAssetName",
+                                  iconAssetName: ideaIcon,
+                                  total: statData.totalidea!,
+                                  index: 2),
+                              eventsButton2(
+                                pageName: () {},
+                                // pageName: RouterConst.detsideaPageName,
+                                title: "Total Participants",
+                                // iconAssetName: "iconAssetName",
+                                iconAssetName: ideaIcon,
+                                total: statData.totalparticipants!,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  // :Column(
+                  //     children: [
+                  //       Row(
+                  //         mainAxisAlignment:
+                  //             MainAxisAlignment.spaceEvenly,
+                  //         children: [
+                  //           eventsButton(
+                  //               title: "StartUps",
+                  //               // iconAssetName: "iconAssetName",
+                  //               iconAssetName: ideaIcon,
+                  //               total: statData.totalstartup!,
+                  //               index: 0),
+                  //           eventsButton(
+                  //               title: "Prototypes",
+                  //               // iconAssetName: "iconAssetName",
+                  //               iconAssetName: ideaIcon,
+                  //               total: statData.totalprototype!,
+                  //               index: 1),
+                  //         ],
+                  //       ),
+                  //       SizedBox(
+                  //         height: 20,
+                  //       ),
+                  //       Row(
+                  //         mainAxisAlignment:
+                  //             MainAxisAlignment.spaceEvenly,
+                  //         children: [
+                  //           eventsButton(
+                  //               title: "Ideas",
+                  //               // iconAssetName: "iconAssetName",
+                  //               iconAssetName: ideaIcon,
+                  //               total: statData.totalidea!,
+                  //               index: 2),
+                  //           eventsButton2(
+                  //             pageName: () {},
+                  //             // pageName: RouterConst.detsideaPageName,
+                  //             title: "Total Participants",
+                  //             // iconAssetName: "iconAssetName",
+                  //             iconAssetName: ideaIcon,
+                  //             total: statData.totalparticipants!,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                ],
               ),
             ),
           ),

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://10.60.42.160:7070/api")
+@RestApi(baseUrl: "http://nif.opju.ac.in:7070/api")
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
@@ -24,4 +24,17 @@ abstract class ApiService {
   
   @GET("/startup")
   Future<String> getStartUpApi();
+
+  @POST("/user/auth")
+  Future<String> userAuthApi(
+    @Body()
+    String requestBody
+    );
+
+    
+  @POST("/user")
+  Future<String> newUserApi(
+    @Body()
+    String requestBody
+    );
 }

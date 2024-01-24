@@ -50,8 +50,14 @@ class _DetailsPageState extends State<DetailsPage>
     int prototypeLength = prototypeprovider.getPrototypeListLentgh;
     int startupLength = startupprovider.getStartUpListLength;
 
-    Future<void> _refresh() async {
+    Future<void> _startuprefresh() async {
       startupprovider.getsStartUpProvider();
+    }
+    Future<void> _prototyperefresh() async {
+      prototypeprovider.getsPrototypeProvider();
+    }
+    Future<void> _idearefresh() async {
+      ideaprovider.getsIdeaProvider();
     }
 
     return Scaffold(
@@ -74,12 +80,13 @@ class _DetailsPageState extends State<DetailsPage>
             child: Align(
               alignment: Alignment.center,
               child: IconButton(
-                  onPressed: () {},
-                  // onPressed: onPressed,
-                  icon: Icon(
-                    Icons.logout,
-                    size: 28,
-                  )),
+                onPressed: () {},
+                // onPressed: onPressed,
+                icon: Icon(
+                  Icons.logout,
+                  size: 28,
+                ),
+              ),
             ),
           )
         ],
@@ -98,7 +105,7 @@ class _DetailsPageState extends State<DetailsPage>
           Container(
             padding: EdgeInsets.only(top: 8),
             child: RefreshIndicator(
-              onRefresh: _refresh,
+              onRefresh: _startuprefresh,
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 itemCount: startupLength,
@@ -121,7 +128,7 @@ class _DetailsPageState extends State<DetailsPage>
           Container(
             padding: EdgeInsets.only(top: 8),
             child: RefreshIndicator(
-              onRefresh: _refresh,
+              onRefresh: _prototyperefresh,
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 itemCount: prototypeLength,
@@ -140,7 +147,7 @@ class _DetailsPageState extends State<DetailsPage>
           Container(
             padding: EdgeInsets.only(top: 8),
             child: RefreshIndicator(
-              onRefresh: _refresh,
+              onRefresh: _idearefresh,
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: 10),
                 itemCount: ideaLength,
