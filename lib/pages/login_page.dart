@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
 import 'package:flutter/material.dart' hide Colors;
+import 'package:nif_web/Provider/auth_provider.dart';
 import 'package:nif_web/pages/forgot_password_page.dart';
 import 'package:nif_web/pages/home_page.dart';
 import 'package:nif_web/res/images.dart';
+import 'package:provider/provider.dart';
 
 import '../res/colors.dart';
 
@@ -15,19 +17,20 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _showPasswordIcon = false;
   bool _obscureText = true;
+  TextEditingController _userIdController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: Colors.primaryColor,
-          hintColor: Colors.grey_70,
-          colorScheme: ColorScheme.light(
-              primary: Colors.primaryColor, secondary: Colors.secondaryColor)),
-
-      home: Scaffold(
+    final provider = Provider.of<AuthProvider>(context);
+    return GestureDetector(
+        onTap: () {
+          // Remove focus when the user taps outside the TextFormField
+          FocusScope.of(context).unfocus();
+        },
+      child: Scaffold(
         backgroundColor: Color.fromARGB(255, 238, 238, 238),
-        body: Padding(
+        body: provider.isSignedOut?Center(child: CircularProgressIndicator()):Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -70,70 +73,71 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Card LoginTemplate(BuildContext context) {
-    return Card(
-      elevation: 3,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(9),
+  Widget LoginTemplate(BuildContext context) {
+    final provider = Provider.of<AuthProvider>(context);
+    return Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Card(
+        elevation: 3,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(9),
+            ),
+            // border: Border.all(color: Colors.black,width: 3)
           ),
-          // border: Border.all(color: Colors.black,width: 3)
-        ),
-        // margin: EdgeInsets.symmetric(vertical: 87, horizontal: 10),
-        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
-        width: MediaQuery.of(context).size.width - 8,
-        // height: 370 ,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              // margin: EdgeInsets.only(bottom: 25, top: 45),
-              child: Text(
-                "Welcome Back",
-                style: TextStyle(
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+          // margin: EdgeInsets.symmetric(vertical: 87, horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+          width: MediaQuery.of(context).size.width - 8,
+          // height: 370 ,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                // margin: EdgeInsets.only(bottom: 25, top: 45),
+                child: Text(
+                  "Welcome Back",
+                  style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
               ),
-            ),
-            Container(
-              // margin: EdgeInsets.only(bottom: 25, top: 45),
-              child: Text(
-                "Enter your credentials to access your account",
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey),
+              Container(
+                // margin: EdgeInsets.only(bottom: 25, top: 45),
+                child: Text(
+                  "Enter your credentials to access your account",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 36,
-            ),
-            // SizedBox(height: 8,),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(12)),
-              child: TextFormField(
+              SizedBox(
+                height: 36,
+              ),
+              // SizedBox(height: 8,),
+              TextFormField(
+                controller: _userIdController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'required*';
+                  }
+                  return null;
+                },
                 textAlignVertical: TextAlignVertical.center,
-                keyboardType: TextInputType.emailAddress,
+                // keyboardType: TextInputType.text,
                 maxLines: 1,
                 // maxLength: 35,
                 minLines: 1,
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-                  border: InputBorder.none,
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            Colors.transparent), // Set the bottom border color
-                  ),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
                   hintText: "User I\'d no.",
                   hintStyle: TextStyle(
                       color: const Color.fromARGB(255, 102, 102, 102),
@@ -146,18 +150,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(12)),
-              child: TextFormField(
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'required*';
+                  }
+                  return null;
+                },
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.visiblePassword,
                 smartDashesType: SmartDashesType.enabled,
@@ -168,7 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
                   hintText: "Type your password...",
                   hintStyle: TextStyle(
                       color: const Color.fromARGB(255, 102, 102, 102),
@@ -200,37 +205,39 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 27,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width - 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13.0),
-                  color: Colors.primaryColor
-                ),
-                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
-                child: Center(
-                  child: Text(
-                    "LOGIN",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
+              SizedBox(
+                height: 27,
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    provider.userAuthProvider(_userIdController.text.trim(),
+                        _passwordController.text.trim(), context);
+                  }
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 60,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13.0),
+                      color: Colors.primaryColor),
+                  padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+                  child: Center(
+                    child: Text(
+                      "LOGIN",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-          ],
+              SizedBox(
+                height: 12,
+              ),
+            ],
+          ),
         ),
       ),
     );

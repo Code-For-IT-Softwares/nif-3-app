@@ -7,3 +7,6 @@ const whatsappIcon = "assets/images/whatsapp.png";
 const checkIcon = "assets/images/check.png";
 const jspLogo = "assets/images/jsp_logo.png";
 const cancelIcon = "assets/images/cancel.png";
+const idPhotoV = "assets/images/id_photo.png";
+const adminIDPhoto = "assets/images/admin_id_photo.jpg";
+const leafOpjuICLogo = "assets/images/leaf_opjuic_logo.png";

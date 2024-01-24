@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:nif_web/res/images.dart';
 
-import 'home_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -11,8 +10,6 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPage extends State<ForgotPasswordPage> {
-  // bool _showPasswordIcon = false;
-  // bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +133,7 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
                   ),
                   SizedBox(height: 27,),
                   GestureDetector(
-                    onTap: ()=>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage())),
+                    // onTap: ()=>Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage())),
                     // onTap: () {},
                     child: Container(
                       width: MediaQuery.of(context).size.width - 60,

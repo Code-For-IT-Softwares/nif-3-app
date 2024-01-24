@@ -1,12 +1,21 @@
-import 'dart:ui';
 import 'package:flutter/material.dart' hide Colors;
+import 'package:nif_web/Provider/auth_provider.dart';
+import 'package:nif_web/Provider/stats_provider.dart';
+import 'package:nif_web/model/stats_model.dart';
+import 'package:nif_web/pages/account_page.dart';
 import 'package:nif_web/pages/list_page.dart';
 import 'package:nif_web/res/colors.dart';
 import 'package:nif_web/res/images.dart';
+import 'package:provider/provider.dart';
+
+import '../model/user_model.dart';
+
+// HOMESCREEN
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  HomePage({super.key, this.user});
 
+    final UserData? user;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -16,19 +25,214 @@ class _HomePageState extends State<HomePage> {
 
   int selectedItem = 0;
   @override
+  void initState() {
+    Provider.of<StatsProvider>(context, listen: false).getsStatsProvider();
+    Provider.of<AuthProvider>(context, listen: false).checkDataStatus();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<StatsProvider>(context);
+    Stat statData = provider.getStat();
+    final authProvider = Provider.of<AuthProvider>(context);
+    UserData LoginData = authProvider.userData!;
+
+
+    Future<void> _refresh() async {
+      provider.getsStatsProvider();
+    }
+
     return Scaffold(
       backgroundColor: Color(0xFFFDFEFD),
-      appBar: PreferredSize(preferredSize: Size(MediaQuery.of(context).size.width,60),
-      child: SizedBox(height: 60,),),
+      appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.of(context).size.width, 60),
+        child: SizedBox(
+          height: 60,
+        ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
           /// Custom Bottom Navigation Bar
-          SingleChildScrollView(
-            child: MainContent(),
+          Center(
+            child: Container(
+              margin: EdgeInsets.only(top: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    color: Colors.transparent,
+                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.account_circle,
+                          size: 63,
+                          color: Color(0xFF73839b),
+                        ),
+                        SizedBox(
+                          width: 7,
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${LoginData.fullname!} (${LoginData.role})",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'roboto',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                LoginData.userid!,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'roboto',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // SizedBox(width: 125,),
+                        Expanded(
+                            flex: 1,
+                            child: IconButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountPage()));
+                                },
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.green,
+                                  size: 35,
+                                )))
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      "Registration Stats",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'roboto',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    flex: 1,
+                    child:
+                        provider.getStatloaded
+                            ? Center(child: CircularProgressIndicator())
+                            :
+                        RefreshIndicator(
+                      onRefresh: _refresh,
+                      // onRefresh: ,
+                      child: ListView(
+                        // shrinkWrap: true,
+                        // physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              eventsButton(
+                                  title: "StartUps",
+                                  // iconAssetName: "iconAssetName",
+                                  iconAssetName: ideaIcon,
+                                  total: statData.totalstartup!,
+                                  index: 0),
+                              eventsButton(
+                                  title: "Prototypes",
+                                  // iconAssetName: "iconAssetName",
+                                  iconAssetName: ideaIcon,
+                                  total: statData.totalprototype!,
+                                  index: 1),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              eventsButton(
+                                  title: "Ideas",
+                                  // iconAssetName: "iconAssetName",
+                                  iconAssetName: ideaIcon,
+                                  total: statData.totalidea!,
+                                  index: 2),
+                              eventsButton2(
+                                pageName: () {},
+                                // pageName: RouterConst.detsideaPageName,
+                                title: "Total Participants",
+                                // iconAssetName: "iconAssetName",
+                                iconAssetName: ideaIcon,
+                                total: statData.totalparticipants!,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  // :Column(
+                  //     children: [
+                  //       Row(
+                  //         mainAxisAlignment:
+                  //             MainAxisAlignment.spaceEvenly,
+                  //         children: [
+                  //           eventsButton(
+                  //               title: "StartUps",
+                  //               // iconAssetName: "iconAssetName",
+                  //               iconAssetName: ideaIcon,
+                  //               total: statData.totalstartup!,
+                  //               index: 0),
+                  //           eventsButton(
+                  //               title: "Prototypes",
+                  //               // iconAssetName: "iconAssetName",
+                  //               iconAssetName: ideaIcon,
+                  //               total: statData.totalprototype!,
+                  //               index: 1),
+                  //         ],
+                  //       ),
+                  //       SizedBox(
+                  //         height: 20,
+                  //       ),
+                  //       Row(
+                  //         mainAxisAlignment:
+                  //             MainAxisAlignment.spaceEvenly,
+                  //         children: [
+                  //           eventsButton(
+                  //               title: "Ideas",
+                  //               // iconAssetName: "iconAssetName",
+                  //               iconAssetName: ideaIcon,
+                  //               total: statData.totalidea!,
+                  //               index: 2),
+                  //           eventsButton2(
+                  //             pageName: () {},
+                  //             // pageName: RouterConst.detsideaPageName,
+                  //             title: "Total Participants",
+                  //             // iconAssetName: "iconAssetName",
+                  //             iconAssetName: ideaIcon,
+                  //             total: statData.totalparticipants!,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                ],
+              ),
+            ),
           ),
 
           /// Bottom Navigation bar box
@@ -41,131 +245,11 @@ class _HomePageState extends State<HomePage> {
     );
   } //build
 
-  Widget MainContent() {
-    int startcount = 138;
-    int prototypecount = 245;
-    int ideacount = 368;
-    int totalcount = startcount + prototypecount + ideacount;
-
-    return Center(
-      child: Container(
-        margin: EdgeInsets.only(top:12 ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: Colors.transparent,
-              margin: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.account_circle,
-                    size: 63,
-                    color: Color(0xFF73839b),
-                  ),
-                  SizedBox(width: 7,),
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Shrey Raj Singh",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'roboto',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                        ),
-                        Text(
-                          "UID2213",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'roboto',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // SizedBox(width: 125,),
-                  Expanded(flex: 1,child: IconButton(onPressed: (){}, icon: Icon(Icons.edit,color: Colors.green,size: 35,)))
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 25.0),
-              child: Text(
-                "Registration Stats",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'roboto',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16),
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                eventsButton(
-                    title: "StartUps",
-                    // iconAssetName: "iconAssetName",
-                    iconAssetName: ideaIcon,
-                    total: startcount,
-                    confirmed: 315,
-                    index: 0),
-                eventsButton(
-                    title: "Prototypes",
-                    // iconAssetName: "iconAssetName",
-                    iconAssetName: ideaIcon,
-                    total: prototypecount,
-                    confirmed: 120,
-                    index: 1),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                eventsButton(
-                    title: "Ideas",
-                    // iconAssetName: "iconAssetName",
-                    iconAssetName: ideaIcon,
-                    total: ideacount,
-                    confirmed: 2550,
-                    index: 2),
-                eventsButton2(
-                  pageName: () {},
-                  // pageName: RouterConst.detsideaPageName,
-                  title: "Total",
-                  // iconAssetName: "iconAssetName",
-                  iconAssetName: ideaIcon,
-                  total: totalcount,
-                  confirmed: 2550,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget eventsButton(
           {required String title,
           required int total,
           required int index,
-          required double confirmed,
+          // required double confirmed,
           required String iconAssetName}) =>
       GestureDetector(
         onTap: () => Navigator.push(
@@ -179,12 +263,12 @@ class _HomePageState extends State<HomePage> {
             // margin: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
             width: 163,
             height: 119,
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.primaryColor),
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-              ),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.primaryColor),
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,10 +276,11 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   '${title.toUpperCase()}',
                   style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'roboto',
-                      color: Colors.black,),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'roboto',
+                    color: Colors.black,
+                  ),
                 ),
                 Text(
                   '${total.toInt()}',
@@ -217,14 +302,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        
       );
 
   Widget eventsButton2(
           {required var pageName,
           required String title,
           required int total,
-          required double confirmed,
+          // required double confirmed,
           required String iconAssetName}) =>
       GestureDetector(
         // onTap: () => context.goNamed(pageName),
@@ -236,12 +320,12 @@ class _HomePageState extends State<HomePage> {
             // margin: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
             width: 163,
             height: 119,
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.primaryColor),
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-              ),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.primaryColor),
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -249,10 +333,12 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   '${title.toUpperCase()}',
                   style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'roboto',
-                      color: Colors.black,),
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'roboto',
+                    color: Colors.black,
+                  ),
                 ),
                 Text(
                   '${total.toInt()}',
