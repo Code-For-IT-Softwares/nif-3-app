@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.nif_3.0"
+    namespace "com.example.nif_web"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
