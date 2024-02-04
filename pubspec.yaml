@@ -42,8 +42,9 @@ dependencies:
   built_value_generator: ^8.6.3
   dio: ^5.3.3
   google_fonts: ^6.1.0
-  intl: ^0.18.1
+  intl: ^0.19.0
   shared_preferences: ^2.2.2
+  url_launcher: ^6.2.4
 
 
 dev_dependencies:

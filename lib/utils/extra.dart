@@ -16,57 +16,22 @@ class DetailTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '${title}: ',
           style: TextStyle(fontSize: 18,fontFamily: 'Lucida', fontWeight: FontWeight.w600),
         ),
-        Text(
-          '${descriptition}',
-          style: TextStyle(fontFamily: 'roboto',fontSize: 18,),
+        Expanded(
+          child: Text(
+            '${descriptition}',
+            style: TextStyle(fontFamily: 'roboto',fontSize: 18,),
+          ),
         ),
       ],
     );
   }
 }
-
-
-class DescriptionTag extends StatelessWidget {
-  const DescriptionTag({
-    Key? key,
-    required this.title,
-    required this.descriptition,
-  }) : super(key: key);
-
-  final String title;
-  final String descriptition;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '${title}: ',
-            style: TextStyle(fontSize: 18,fontFamily: 'Lucida', fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Text(
-              '${descriptition}',
-              style: TextStyle(fontFamily: 'roboto',fontSize: 18,),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-
 
 class QuarterCircleClipper extends CustomClipper<Path> {
   final double sizeOfCut;

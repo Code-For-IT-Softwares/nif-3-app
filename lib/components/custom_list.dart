@@ -4,6 +4,7 @@ import 'package:nif_web/model/prototype_model.dart';
 import 'package:nif_web/pages/idea_page.dart';
 import 'package:nif_web/pages/prototype_page.dart';
 import 'package:nif_web/pages/startup_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../model/startup_model.dart';
 import '../res/colors.dart';
 
@@ -22,11 +23,12 @@ class IdeaTab extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => IdeaPage(
-                    ideaDetails: ideaData, index: index,
+                    ideaDetails: ideaData,
+                    index: index,
                   ))),
       // onTap: () => context.goNamed(RouterConst.accountPageName),
       child: Hero(
-      tag: 'idea-tag${index}',
+        tag: 'idea-tag${index}',
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 14),
           // height: 85,
@@ -70,50 +72,54 @@ class IdeaTab extends StatelessWidget {
                               fontSize: 14,
                             ),
                           ),
-                          Row(
-                            children: [
-                          Text(
-                            'Leader: ${ideaData.leadername}',
-                            style: TextStyle(
-                              fontFamily: 'roboto',
-                              fontSize: 14,
-                            ),
-                          ),SizedBox(width: 7,),
-                          // Text(
-                          //   ideaData.phoneno,
-                          //   style: TextStyle(
-                          //     // fontWeight: FontWeight.bold,
-                          //     fontFamily: 'roboto',
-                          //     fontSize: 14,
-                          //   ),
-                          // ),
-                          ],
-                          )
+                          
+                              Text(
+                                'Leader: ${ideaData.leadername}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'roboto',
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              // Text(
+                              //   ideaData.phoneno,
+                              //   style: TextStyle(
+                              //     // fontWeight: FontWeight.bold,
+                              //     fontFamily: 'roboto',
+                              //     fontSize: 14,
+                              //   ),
+                              // ),
+                           
                         ],
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: GestureDetector(
-                          onTap: () {},
+                          onTap: () => launchUrl(
+                            Uri.parse("tel://${ideaData.phoneno!}")),
                           child: Card(
-                            color: Colors.green,
-                            child: Container(
-                              // width:,
-                              height: 34,
-                              child: Center(
-                                child: Text(
+                              color: Colors.green,
+                              child: Container(
+                                // width:,
+                                height: 34,
+                                child: Center(
+                                    child: Text(
                                   'Call',
                                   style: TextStyle(
-                                    fontFamily: 'roboto',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16
-                                  ),
-                                  )),
-                            ))),
+                                      fontFamily: 'roboto',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 16),
+                                )),
+                              ))),
                     ),
-                    SizedBox(width: 10,)
+                    SizedBox(
+                      width: 10,
+                    )
                   ],
                 ),
               )),
@@ -154,7 +160,8 @@ class PrototypeTab extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => PrototypePage(prototypeDetails: prototypeData))),
+              builder: (context) =>
+                  PrototypePage(prototypeDetails: prototypeData))),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 14),
         // height: 85,
@@ -193,20 +200,24 @@ class PrototypeTab extends StatelessWidget {
                         ),
                         Text(
                           'Team: ${prototypeData.teamname}',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'roboto',
                             fontSize: 14,
                           ),
                         ),
-                        Row(
-                          children: [
+
                         Text(
                           'Leader: ${prototypeData.leadername}',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'roboto',
                             fontSize: 14,
                           ),
-                        ),SizedBox(width: 7,),
+                        ),
+                        SizedBox(
+                          width: 7,
+                        ),
                         // Text(
                         //   prototypeData.phoneno,
                         //   style: TextStyle(
@@ -215,33 +226,33 @@ class PrototypeTab extends StatelessWidget {
                         //     fontSize: 14,
                         //   ),
                         // ),
-                        ],
-                        )
                       ],
                     ),
                   ),
                   Expanded(
                     flex: 2,
                     child: GestureDetector(
-                        onTap: () {},
+                        onTap: () => launchUrl(
+                            Uri.parse("tel://${prototypeData.phoneno!}")),
                         child: Card(
-                          color: Colors.green,
-                          child: Container(
-                            // width:,
-                            height: 34,
-                            child: Center(
-                              child: Text(
+                            color: Colors.green,
+                            child: Container(
+                              // width:,
+                              height: 34,
+                              child: Center(
+                                  child: Text(
                                 'Call',
                                 style: TextStyle(
-                                  fontFamily: 'roboto',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 16
-                                ),
-                                )),
-                          ))),
+                                    fontFamily: 'roboto',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16),
+                              )),
+                            ))),
                   ),
-                  SizedBox(width: 10,)
+                  SizedBox(
+                    width: 10,
+                  )
                 ],
               ),
             )),
@@ -308,15 +319,18 @@ class StartUpTab extends StatelessWidget {
                             fontSize: 14,
                           ),
                         ),
-                        Row(
-                          children: [
+
                         Text(
                           'Founder: ${startupData.foundername}',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'roboto',
                             fontSize: 14,
                           ),
-                        ),SizedBox(width: 7,),
+                        ),
+                        SizedBox(
+                          width: 7,
+                        ),
                         // Text(
                         //   startupData.phoneno,
                         //   style: TextStyle(
@@ -325,33 +339,33 @@ class StartUpTab extends StatelessWidget {
                         //     fontSize: 14,
                         //   ),
                         // ),
-                        ],
-                        )
                       ],
                     ),
                   ),
                   Expanded(
                     flex: 2,
                     child: GestureDetector(
-                        onTap: () {},
+                        onTap: () => launchUrl(
+                            Uri.parse("tel://${startupData.phoneno!}")),
                         child: Card(
-                          color: Colors.green,
-                          child: Container(
-                            // width:,
-                            height: 34,
-                            child: Center(
-                              child: Text(
+                            color: Colors.green,
+                            child: Container(
+                              // width:,
+                              height: 34,
+                              child: Center(
+                                  child: Text(
                                 'Call',
                                 style: TextStyle(
-                                  fontFamily: 'roboto',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 16
-                                ),
-                                )),
-                          ))),
+                                    fontFamily: 'roboto',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16),
+                              )),
+                            ))),
                   ),
-                  SizedBox(width: 10,)
+                  SizedBox(
+                    width: 10,
+                  )
                 ],
               ),
             )),
