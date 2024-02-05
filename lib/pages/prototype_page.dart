@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart' hide Colors;
 import 'package:intl/intl.dart';
 import 'package:nif_web/model/prototype_model.dart';
+import 'package:nif_web/pages/imageview_page.dart';
 import 'package:nif_web/res/colors.dart';
+import 'package:nif_web/services/network/image_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/extra.dart';
@@ -68,7 +70,8 @@ class PrototypePage extends StatelessWidget {
                 SizedBox(height: 8),
                 DetailTag(
                     title: 'Date & Time',
-                    descriptition: DateFormat("dd-MM-yyyy, hh:mm a").format(prototypeDetails.datetime!)),
+                    descriptition: DateFormat("dd-MM-yyyy, hh:mm a")
+                        .format(prototypeDetails.datetime!)),
                 SizedBox(height: 8),
                 Text(
                   'Product Description: ',
@@ -83,6 +86,65 @@ class PrototypePage extends StatelessWidget {
                     fontFamily: 'roboto',
                     fontSize: 18,
                   ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Id Card',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Lucida',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ImageViewPage(
+                                      filePath:
+                                          prototypeDetails.idcardimage))),
+                          child: Image.network(
+                            fetchImageUrl(prototypeDetails.idcardimage!),
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    )),
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Prototype',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Lucida',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ImageViewPage(
+                                      filePath:
+                                          prototypeDetails.projectimage))),
+                          child: Image.network(
+                            fetchImageUrl(prototypeDetails.projectimage!),
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ))
+                  ],
                 ),
                 SizedBox(height: 20),
                 Row(

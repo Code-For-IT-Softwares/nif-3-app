@@ -2,7 +2,9 @@ import 'package:flutter/material.dart' hide Colors;
 import 'package:intl/intl.dart';
 
 import 'package:nif_web/model/idea_model.dart';
+import 'package:nif_web/pages/imageview_page.dart';
 import 'package:nif_web/res/colors.dart';
+import 'package:nif_web/services/network/image_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/extra.dart';
@@ -61,7 +63,8 @@ class IdeaPage extends StatelessWidget {
             SizedBox(height: 8),
             DetailTag(
                 title: 'Date & Time',
-                descriptition: DateFormat("dd-MM-yyyy, hh:mm a").format(ideaDetails.datetime!)),
+                descriptition: DateFormat("dd-MM-yyyy, hh:mm a")
+                    .format(ideaDetails.datetime!)),
             SizedBox(height: 8),
             Text(
               'Idea Description: ',
@@ -75,6 +78,27 @@ class IdeaPage extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'roboto',
                 fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Id Card: ',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Lucida',
+                  fontWeight: FontWeight.w600),
+            ),
+            GestureDetector(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ImageViewPage(filePath: ideaDetails.idcardimage))),
+              child: Image.network(
+                fetchImageUrl(ideaDetails.idcardimage!),
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
               ),
             ),
             SizedBox(height: 20),

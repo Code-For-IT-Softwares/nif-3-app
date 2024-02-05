@@ -11,18 +11,20 @@
 //   @GET("/posts")
 //   Future<List<Post>> getPosts();
 // }
+import 'package:nif_web/services/network/config.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://nif.opju.ac.in:7070/api")
+@RestApi()
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
   static ApiService getServices() {
+    final _baseUrl = "$baseUrl:$port/api";
     final dio = Dio();
-
+    dio.options = BaseOptions(connectTimeout: Duration(seconds: 30), baseUrl: _baseUrl);
     return ApiService(dio);
   }
 

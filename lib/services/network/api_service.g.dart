@@ -12,9 +12,7 @@ class _ApiService implements ApiService {
   _ApiService(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= 'http://nif.opju.ac.in:7070/api';
-  }
+  });
 
   final Dio _dio;
 
